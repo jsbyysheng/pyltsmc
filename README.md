@@ -25,7 +25,7 @@ make
 ## Statement
 
 This project can only be used for science research. 
-The Leadshine company and `pyltsmc` authors will take no responsibility for any results by `pyltsmc`. 
+The [Leadshine CO.LTD](http://www.szleadtech.com.cn/) and `pyltsmc` authors will take no responsibility for any results by `pyltsmc`. 
 
 ## License
 
