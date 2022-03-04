@@ -1,0 +1,8 @@
+{
+    "files.associations": {
+        "*.m": "matlab",
+        "*.cps": "javascript",
+        "*.h": "cpp",
+        "new": "cpp"
+    }
+}

@@ -1,7 +1,7 @@
-import cmake_example as m
+import build.pyltsmc as pyltsmc
 
-
-def test_main():
-    assert m.__version__ == "0.0.1"
-    assert m.add(1, 2) == 3
-    assert m.subtract(1, 2) == -1
+pyltsmc.smc_set_connect_timeout(5000)
+pyltsmc.smc_board_init(0, 2, '192.168.15.111', 115200)
+print(pyltsmc.smc_get_release_version(0))
+# print(pyltsmc.smc_get_total_axes(0))
+# print(pyltsmc.smc_get_debug_mode())
