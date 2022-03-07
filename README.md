@@ -2,6 +2,8 @@
 
 python binding for leadshine smc motion controller by [pybind11](https://github.com/pybind/pybind11). 
 
+![SMC604](http://www.szleadtech.com.cn/upload/201504/23/201504231130000706.jpg)
+
 ## Prerequisites
 
 - Linux system
@@ -23,7 +25,7 @@ make
 ## Statement
 
 This project can only be used for science research. 
-The Leadshine company and `pyltsmc` authors will take no responsibility for any results by `pyltsmc`. 
+The [Leadshine CO.LTD](http://www.szleadtech.com.cn/) and `pyltsmc` authors will take no responsibility for any results by `pyltsmc`. 
 
 ## License
 
