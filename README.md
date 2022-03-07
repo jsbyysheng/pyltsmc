@@ -21,6 +21,7 @@ mkdir build && cd build
 cmake ..
 make
 ```
+Then you can copy `build` dir to any place and import by `from build import pyltsmc`
 
 ## Statement
 
