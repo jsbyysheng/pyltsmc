@@ -4,5 +4,6 @@
         "*.cps": "javascript",
         "*.h": "cpp",
         "new": "cpp"
-    }
+    },
+    "cmake.configureOnOpen": false
 }
