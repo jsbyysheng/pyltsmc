@@ -1,5 +1,6 @@
 #include <LTSMC.h>
 #include <pybind11/pybind11.h>
+#include <pybind11/stl.h>
 
 #define STRINGIFY(x) #x
 #define MACRO_STRINGIFY(x) STRINGIFY(x)
@@ -1019,9 +1020,10 @@ py::list py_smc_get_arc_limit(WORD ConnectNo, WORD Crd) {
     return ret;
 }
 
-py::list py_smc_conti_open_list(WORD ConnectNo, WORD Crd, WORD AxisNum, WORD* AxisList) {
+py::list py_smc_conti_open_list(WORD ConnectNo, WORD Crd, WORD AxisNum, std::vector<WORD> AxisList) {
     py::list ret;
-    ret.append(smc_conti_open_list(ConnectNo, Crd, AxisNum, AxisList));
+    WORD* AxisList_arr = &AxisList[0];
+    ret.append(smc_conti_open_list(ConnectNo, Crd, AxisNum, AxisList_arr));
     return ret;
 }
 
@@ -1073,31 +1075,39 @@ py::list py_smc_conti_read_current_mark(WORD ConnectNo, WORD Crd) {
     return ret;
 }
 
-py::list py_smc_conti_line_unit(WORD ConnectNo, WORD Crd, WORD AxisNum, WORD* AxisList, double* pPosList, WORD posi_mode, long mark) {
+py::list py_smc_conti_line_unit(WORD ConnectNo, WORD Crd, WORD AxisNum, std::vector<WORD> AxisList, std::vector<double> pPosList, WORD posi_mode, long mark) {
     py::list ret;
-    ret.append(smc_conti_line_unit(ConnectNo, Crd, AxisNum, AxisList, pPosList, posi_mode, mark));
+    WORD* AxisList_arr = &AxisList[0];
+    double* pPosList_arr = &pPosList[0];
+    ret.append(smc_conti_line_unit(ConnectNo, Crd, AxisNum, AxisList_arr, pPosList_arr, posi_mode, mark));
     return ret;
 }
 
-// TODO
+py::list py_smc_conti_arc_move_center_unit(WORD ConnectNo, WORD Crd, WORD AxisNum, std::vector<WORD> AxisList, std::vector<double> Target_Pos, std::vector<double> Cen_Pos, WORD Arc_Dir, long Circle, WORD posi_mode, long mark) {
+    py::list ret;
+    WORD* AxisList_arr = &AxisList[0];
+    double* Target_Pos_arr = &Target_Pos[0];
+    double* Cen_Pos_arr = &Cen_Pos[0];
+    ret.append(smc_conti_arc_move_center_unit(ConnectNo, Crd, AxisNum, AxisList_arr, Target_Pos_arr, Cen_Pos_arr, Arc_Dir, Circle, posi_mode, mark));
+    return ret;
+}
 
-// py::list py_smc_conti_arc_move_center_unit(WORD ConnectNo, WORD Crd, WORD AxisNum, WORD* AxisList, double* Target_Pos, double* Cen_Pos, WORD Arc_Dir, long Circle, WORD posi_mode, long mark) {
-//     py::list ret;
-//     ret.append(smc_conti_arc_move_center_unit(ConnectNo, Crd, AxisNum, AxisList, Target_Pos, Cen_Pos, Arc_Dir, Circle, posi_mode, mark));
-//     return ret;
-// }
+py::list py_smc_conti_arc_move_radius_unit(WORD ConnectNo, WORD Crd, WORD AxisNum, std::vector<WORD> AxisList, std::vector<double> Target_Pos, double Arc_Radius, WORD Arc_Dir, long Circle, WORD posi_mode, long mark) {
+    py::list ret;
+    WORD* AxisList_arr = &AxisList[0];
+    double* Target_Pos_arr = &Target_Pos[0];
+    ret.append(smc_conti_arc_move_radius_unit(ConnectNo, Crd, AxisNum, AxisList_arr, Target_Pos_arr, Arc_Radius, Arc_Dir, Circle, posi_mode, mark));
+    return ret;
+}
 
-// py::list py_smc_conti_arc_move_radius_unit(WORD ConnectNo, WORD Crd, WORD AxisNum, WORD* AxisList, double* Target_Pos, double Arc_Radius, WORD Arc_Dir, long Circle, WORD posi_mode, long mark) {
-//     py::list ret;
-//     ret.append(smc_conti_arc_move_radius_unit(ConnectNo, Crd, AxisNum, AxisList, Target_Pos, Arc_Radius, Arc_Dir, Circle, posi_mode, mark));
-//     return ret;
-// }
-
-// py::list py_smc_conti_arc_move_3points_unit(WORD ConnectNo, WORD Crd, WORD AxisNum, WORD* AxisList, double* Target_Pos, double* Mid_Pos, long Circle, WORD posi_mode, long mark) {
-//     py::list ret;
-//     ret.append(smc_conti_arc_move_3points_unit(ConnectNo, Crd, AxisNum, AxisList, Target_Pos, Mid_Pos, Circle, posi_mode, mark));
-//     return ret;
-// }
+py::list py_smc_conti_arc_move_3points_unit(WORD ConnectNo, WORD Crd, WORD AxisNum, std::vector<WORD> AxisList, std::vector<double> Target_Pos, std::vector<double> Mid_Pos, long Circle, WORD posi_mode, long mark) {
+    py::list ret;
+    WORD* AxisList_arr = &AxisList[0];
+    double* Target_Pos_arr = &Target_Pos[0];
+    double* Mid_Pos_arr = &Mid_Pos[0];
+    ret.append(smc_conti_arc_move_3points_unit(ConnectNo, Crd, AxisNum, AxisList_arr, Target_Pos_arr, Mid_Pos_arr, Circle, posi_mode, mark));
+    return ret;
+}
 
 py::list py_smc_conti_wait_input(WORD ConnectNo, WORD Crd, WORD bitno, WORD on_off, double TimeOut, long mark) {
     py::list ret;
@@ -2671,41 +2681,41 @@ py::list py_smc_read_inbit_virtual(WORD ConnectNo, WORD bitno) {
 //     return ret;
 // }
 
-// py::list py_smc_emg_stop(WORD ConnectNo) {
-//     py::list ret;
-//     ret.append(smc_emg_stop(ConnectNo));
-//     return ret;
-// }
+py::list py_smc_emg_stop(WORD ConnectNo) {
+    py::list ret;
+    ret.append(smc_emg_stop(ConnectNo));
+    return ret;
+}
 
-// py::list py_smc_check_done(WORD ConnectNo, WORD axis) {
-//     py::list ret;
-//     ret.append(smc_check_done(ConnectNo, axis));
-//     return ret;
-// }
+py::list py_smc_check_done(WORD ConnectNo, WORD axis) {
+    py::list ret;
+    ret.append(smc_check_done(ConnectNo, axis));
+    return ret;
+}
 
-// py::list py_smc_stop(WORD ConnectNo, WORD axis, WORD stop_mode) {
-//     py::list ret;
-//     ret.append(smc_stop(ConnectNo, axis, stop_mode));
-//     return ret;
-// }
+py::list py_smc_stop(WORD ConnectNo, WORD axis, WORD stop_mode) {
+    py::list ret;
+    ret.append(smc_stop(ConnectNo, axis, stop_mode));
+    return ret;
+}
 
-// py::list py_smc_check_done_multicoor(WORD ConnectNo, WORD Crd) {
-//     py::list ret;
-//     ret.append(smc_check_done_multicoor(ConnectNo, Crd));
-//     return ret;
-// }
+py::list py_smc_check_done_multicoor(WORD ConnectNo, WORD Crd) {
+    py::list ret;
+    ret.append(smc_check_done_multicoor(ConnectNo, Crd));
+    return ret;
+}
 
-// py::list py_smc_stop_multicoor(WORD ConnectNo, WORD Crd, WORD stop_mode) {
-//     py::list ret;
-//     ret.append(smc_stop_multicoor(ConnectNo, Crd, stop_mode));
-//     return ret;
-// }
+py::list py_smc_stop_multicoor(WORD ConnectNo, WORD Crd, WORD stop_mode) {
+    py::list ret;
+    ret.append(smc_stop_multicoor(ConnectNo, Crd, stop_mode));
+    return ret;
+}
 
-// py::list py_smc_axis_io_status(WORD ConnectNo, WORD axis) {
-//     py::list ret;
-//     ret.append(smc_axis_io_status(ConnectNo, axis));
-//     return ret;
-// }
+py::list py_smc_axis_io_status(WORD ConnectNo, WORD axis) {
+    py::list ret;
+    ret.append(smc_axis_io_status(ConnectNo, axis));
+    return ret;
+}
 
 // py::list py_smc_axis_io_enable_status(WORD ConnectNo, WORD axis) {
 //     py::list ret;
@@ -2713,17 +2723,21 @@ py::list py_smc_read_inbit_virtual(WORD ConnectNo, WORD bitno) {
 //     return ret;
 // }
 
-// py::list py_smc_get_axis_run_mode(WORD ConnectNo, WORD axis, WORD* run_mode) {
-//     py::list ret;
-//     ret.append(smc_get_axis_run_mode(ConnectNo, axis, run_mode));
-//     return ret;
-// }
+py::list py_smc_get_axis_run_mode(WORD ConnectNo, WORD axis) {
+    WORD run_mode = 0;
+    py::list ret;
+    ret.append(smc_get_axis_run_mode(ConnectNo, axis, &run_mode));
+    ret.append(run_mode);
+    return ret;
+}
 
-// py::list py_smc_read_current_speed_unit(WORD ConnectNo, WORD axis, double* current_speed) {
-//     py::list ret;
-//     ret.append(smc_read_current_speed_unit(ConnectNo, axis, current_speed));
-//     return ret;
-// }
+py::list py_smc_read_current_speed_unit(WORD ConnectNo, WORD axis) {
+    double current_speed = 0.0;
+    py::list ret;
+    ret.append(smc_read_current_speed_unit(ConnectNo, axis, &current_speed));
+    ret.append(current_speed);
+    return ret;
+}
 
 // py::list py_smc_set_position_unit(WORD ConnectNo, WORD axis, double pos) {
 //     py::list ret;
@@ -2731,11 +2745,13 @@ py::list py_smc_read_inbit_virtual(WORD ConnectNo, WORD bitno) {
 //     return ret;
 // }
 
-// py::list py_smc_get_position_unit(WORD ConnectNo, WORD axis, double* pos) {
-//     py::list ret;
-//     ret.append(smc_get_position_unit(ConnectNo, axis, pos));
-//     return ret;
-// }
+py::list py_smc_get_position_unit(WORD ConnectNo, WORD axis) {
+    double pose = 0.0;
+    py::list ret;
+    ret.append(smc_get_position_unit(ConnectNo, axis, &pose));
+    ret.append(pose);
+    return ret;
+}
 
 // py::list py_smc_get_target_position_unit(WORD ConnectNo, WORD axis, double* pos) {
 //     py::list ret;
@@ -2761,11 +2777,11 @@ py::list py_smc_read_inbit_virtual(WORD ConnectNo, WORD bitno) {
 //     return ret;
 // }
 
-// py::list py_smc_clear_stop_reason(WORD ConnectNo, WORD axis) {
-//     py::list ret;
-//     ret.append(smc_clear_stop_reason(ConnectNo, axis));
-//     return ret;
-// }
+py::list py_smc_clear_stop_reason(WORD ConnectNo, WORD axis) {
+    py::list ret;
+    ret.append(smc_clear_stop_reason(ConnectNo, axis));
+    return ret;
+}
 
 // py::list py_smc_trace_set_source(WORD ConnectNo, WORD source) {
 //     py::list ret;
@@ -3410,7 +3426,7 @@ PYBIND11_MODULE(pyltsmc, m) {
     m.def("smc_write_sn", &py_smc_write_sn, py::arg("ConnectNo"), py::arg("sn"));
     m.def("smc_read_sn", &py_smc_read_sn, py::arg("ConnectNo"));
     m.def("smc_write_sn_numstring", &py_smc_write_sn_numstring, py::arg("ConnectNo"), py::arg("sn_str"));
-    m.def("smc_read_sn_numstring", &py_smc_read_sn_numstring, py::arg("ConnectNo"));  // TODO
+    m.def("smc_read_sn_numstring", &py_smc_read_sn_numstring, py::arg("ConnectNo"));
     m.def("smc_write_password", &py_smc_write_password, py::arg("ConnectNo"), py::arg("str_pass"));
     m.def("smc_check_password", &py_smc_check_password, py::arg("ConnectNo"), py::arg("str_pass"));
     m.def("smc_enter_password", &py_smc_enter_password, py::arg("ConnectNo"), py::arg("str_pass"));
@@ -3521,9 +3537,9 @@ PYBIND11_MODULE(pyltsmc, m) {
     m.def("smc_conti_remain_space", &py_smc_conti_remain_space, py::arg("ConnectNo"), py::arg("Crd"));
     m.def("smc_conti_read_current_mark", &py_smc_conti_read_current_mark, py::arg("ConnectNo"), py::arg("Crd"));
     m.def("smc_conti_line_unit", &py_smc_conti_line_unit, py::arg("ConnectNo"), py::arg("Crd"), py::arg("AxisNum"), py::arg("AxisList"), py::arg("pPosList"), py::arg("posi_mode"), py::arg("mark"));
-    // m.def("smc_conti_arc_move_center_unit", &py_smc_conti_arc_move_center_unit, py::arg("ConnectNo"), py::arg("Crd"), py::arg("AxisNum"), py::arg("AxisList"), py::arg("Target_Pos"), py::arg("Cen_Pos"), py::arg("Arc_Dir"), py::arg("Circle"), py::arg("posi_mode"), py::arg("mark"));
-    // m.def("smc_conti_arc_move_radius_unit", &py_smc_conti_arc_move_radius_unit, py::arg("ConnectNo"), py::arg("Crd"), py::arg("AxisNum"), py::arg("AxisList"), py::arg("Target_Pos"), py::arg("Arc_Radius"), py::arg("Arc_Dir"), py::arg("Circle"), py::arg("posi_mode"), py::arg("mark"));
-    // m.def("smc_conti_arc_move_3points_unit", &py_smc_conti_arc_move_3points_unit, py::arg("ConnectNo"), py::arg("Crd"), py::arg("AxisNum"), py::arg("AxisList"), py::arg("Target_Pos"), py::arg("Mid_Pos"), py::arg("Circle"), py::arg("posi_mode"), py::arg("mark"));
+    m.def("smc_conti_arc_move_center_unit", &py_smc_conti_arc_move_center_unit, py::arg("ConnectNo"), py::arg("Crd"), py::arg("AxisNum"), py::arg("AxisList"), py::arg("Target_Pos"), py::arg("Cen_Pos"), py::arg("Arc_Dir"), py::arg("Circle"), py::arg("posi_mode"), py::arg("mark"));
+    m.def("smc_conti_arc_move_radius_unit", &py_smc_conti_arc_move_radius_unit, py::arg("ConnectNo"), py::arg("Crd"), py::arg("AxisNum"), py::arg("AxisList"), py::arg("Target_Pos"), py::arg("Arc_Radius"), py::arg("Arc_Dir"), py::arg("Circle"), py::arg("posi_mode"), py::arg("mark"));
+    m.def("smc_conti_arc_move_3points_unit", &py_smc_conti_arc_move_3points_unit, py::arg("ConnectNo"), py::arg("Crd"), py::arg("AxisNum"), py::arg("AxisList"), py::arg("Target_Pos"), py::arg("Mid_Pos"), py::arg("Circle"), py::arg("posi_mode"), py::arg("mark"));
     m.def("smc_conti_wait_input", &py_smc_conti_wait_input, py::arg("ConnectNo"), py::arg("Crd"), py::arg("bitno"), py::arg("on_off"), py::arg("TimeOut"), py::arg("mark"));
     m.def("smc_conti_delay_outbit_to_start", &py_smc_conti_delay_outbit_to_start, py::arg("ConnectNo"), py::arg("Crd"), py::arg("bitno"), py::arg("on_off"), py::arg("delay_value"), py::arg("delay_mode"), py::arg("ReverseTime"));
     m.def("smc_conti_delay_outbit_to_stop", &py_smc_conti_delay_outbit_to_stop, py::arg("ConnectNo"), py::arg("Crd"), py::arg("bitno"), py::arg("on_off"), py::arg("delay_time"), py::arg("ReverseTime"));
@@ -3775,22 +3791,22 @@ PYBIND11_MODULE(pyltsmc, m) {
     // m.def("smc_gcode_set_step_state", &py_smc_gcode_set_step_state, py::arg("ConnectNo"), py::arg("state"));
     // m.def("smc_gcode_get_step_state", &py_smc_gcode_get_step_state, py::arg("ConnectNo"), py::arg("state"));
     // m.def("smc_gcode_stop_reason", &py_smc_gcode_stop_reason, py::arg("ConnectNo"), py::arg("stop_reason"));
-    // m.def("smc_emg_stop", &py_smc_emg_stop, py::arg("ConnectNo"));
-    // m.def("smc_check_done", &py_smc_check_done, py::arg("ConnectNo"), py::arg("axis"));
-    // m.def("smc_stop", &py_smc_stop, py::arg("ConnectNo"), py::arg("axis"), py::arg("stop_mode"));
-    // m.def("smc_check_done_multicoor", &py_smc_check_done_multicoor, py::arg("ConnectNo"), py::arg("Crd"));
-    // m.def("smc_stop_multicoor", &py_smc_stop_multicoor, py::arg("ConnectNo"), py::arg("Crd"), py::arg("stop_mode"));
-    // m.def("smc_axis_io_status", &py_smc_axis_io_status, py::arg("ConnectNo"), py::arg("axis"));
+    m.def("smc_emg_stop", &py_smc_emg_stop, py::arg("ConnectNo"));
+    m.def("smc_check_done", &py_smc_check_done, py::arg("ConnectNo"), py::arg("axis"));
+    m.def("smc_stop", &py_smc_stop, py::arg("ConnectNo"), py::arg("axis"), py::arg("stop_mode"));
+    m.def("smc_check_done_multicoor", &py_smc_check_done_multicoor, py::arg("ConnectNo"), py::arg("Crd"));
+    m.def("smc_stop_multicoor", &py_smc_stop_multicoor, py::arg("ConnectNo"), py::arg("Crd"), py::arg("stop_mode"));
+    m.def("smc_axis_io_status", &py_smc_axis_io_status, py::arg("ConnectNo"), py::arg("axis"));
     // m.def("smc_axis_io_enable_status", &py_smc_axis_io_enable_status, py::arg("ConnectNo"), py::arg("axis"));
-    // m.def("smc_get_axis_run_mode", &py_smc_get_axis_run_mode, py::arg("ConnectNo"), py::arg("axis"), py::arg("run_mode"));
-    // m.def("smc_read_current_speed_unit", &py_smc_read_current_speed_unit, py::arg("ConnectNo"), py::arg("axis"), py::arg("current_speed"));
+    m.def("smc_get_axis_run_mode", &py_smc_get_axis_run_mode, py::arg("ConnectNo"), py::arg("axis"));
+    m.def("smc_read_current_speed_unit", &py_smc_read_current_speed_unit, py::arg("ConnectNo"), py::arg("axis"));
     // m.def("smc_set_position_unit", &py_smc_set_position_unit, py::arg("ConnectNo"), py::arg("axis"), py::arg("pos"));
-    // m.def("smc_get_position_unit", &py_smc_get_position_unit, py::arg("ConnectNo"), py::arg("axis"), py::arg("pos"));
+    m.def("smc_get_position_unit", &py_smc_get_position_unit, py::arg("ConnectNo"), py::arg("axis"));
     // m.def("smc_get_target_position_unit", &py_smc_get_target_position_unit, py::arg("ConnectNo"), py::arg("axis"), py::arg("pos"));
     // m.def("smc_set_workpos_unit", &py_smc_set_workpos_unit, py::arg("ConnectNo"), py::arg("axis"), py::arg("pos"));
     // m.def("smc_get_workpos_unit", &py_smc_get_workpos_unit, py::arg("ConnectNo"), py::arg("axis"), py::arg("pos"));
     // m.def("smc_get_stop_reason", &py_smc_get_stop_reason, py::arg("ConnectNo"), py::arg("axis"), py::arg("StopReason"));
-    // m.def("smc_clear_stop_reason", &py_smc_clear_stop_reason, py::arg("ConnectNo"), py::arg("axis"));
+    m.def("smc_clear_stop_reason", &py_smc_clear_stop_reason, py::arg("ConnectNo"), py::arg("axis"));
     // m.def("smc_trace_set_source", &py_smc_trace_set_source, py::arg("ConnectNo"), py::arg("source"));
     // m.def("smc_read_trace_data", &py_smc_read_trace_data, py::arg("ConnectNo"), py::arg("axis"), py::arg("bufsize"), py::arg("time"), py::arg("pos"), py::arg("vel"), py::arg("acc"), py::arg("recv_num"));
     // m.def("smc_trace_start", &py_smc_trace_start, py::arg("ConnectNo"), py::arg("AxisNum"), py::arg("AxisList"));

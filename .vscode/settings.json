@@ -3,7 +3,8 @@
         "*.m": "matlab",
         "*.cps": "javascript",
         "*.h": "cpp",
-        "new": "cpp"
+        "new": "cpp",
+        "array": "cpp"
     },
     "cmake.configureOnOpen": false
 }
